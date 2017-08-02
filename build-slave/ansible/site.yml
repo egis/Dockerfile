@@ -1,0 +1,47 @@
+- hosts:  all
+  become: yes
+
+  roles:
+     - role: ansiblebit.oracle-java
+       oracle_java_set_as_default: yes
+       oracle_java_version: 8
+
+     - role: geerlingguy.docker
+
+     - role: shelleg.gradle
+       gradle_version_major: "2"
+       gradle_version_minor: "7"
+
+  tasks:
+
+    - name: install security policies
+      action: copy src=files/local_policy.jar dest=/usr/lib/jvm/java-8-oracle/jre/lib/security/
+
+    - name: install security policies
+      action: copy src=files/US_export_policy.jar dest=/usr/lib/jvm/java-8-oracle/jre/lib/security/
+
+    - name: install nodejs
+      shell: curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash - && apt-get install -y nodejs
+
+
+    - name: Install node.js packages globally
+      npm:
+        name: "{{ item }}"
+        global: yes
+      with_items:
+        - node-gyp
+        - webdriver-manager
+        - gulp
+        - rollup
+        - bower
+        - node-sass
+        - karma
+        - yarn
+
+    - name: Install packages
+      package:
+        name:
+          - ant
+          - awscli
+          - postgresql-client
+          - mysql-client

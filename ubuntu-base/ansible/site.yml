@@ -1,0 +1,76 @@
+- hosts:  all
+  become: yes
+
+  tasks:
+
+
+    - name: update cache
+      shell: apt-get update
+
+    - name: install packages
+      package:
+        name: "{{ item }}"
+      with_items:
+        - ca-certificates
+        - locales
+        - openssh-client
+
+        - parallel
+        - net-tools
+        - netcat
+        - git
+
+        - unzip
+        - zip
+        - tar
+        - gzip
+        - bzip2
+
+        - python-requests
+        - python-requestsexceptions
+        - python-docker
+        - python-pip
+        - python3-pip
+        - python-dev
+
+        - s3cmd
+
+        - strace
+        - psutils
+        - iftop
+        - htop
+        - iotop
+        - bash
+        - jq
+
+
+    - name: Install pip packages
+      pip:
+        name:
+          - httpie
+          - ansible-role
+
+    - command: pip3 install chaperone
+
+    - unarchive:
+        src: https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
+        dest: /usr/local/bin
+        remote_src: True
+        mode: u+x
+
+    - unarchive:
+        src: https://github.com/jwilder/dockerize/releases/download/v0.5.0/dockerize-linux-amd64-v0.5.0.tar.gz
+        dest: /usr/local/bin
+        remote_src: True
+        mode: u+x
+
+    - get_url:
+        url: https://github.com/tianon/gosu/releases/download/1.10/gosu-amd64
+        dest: /usr/local/bin/gosu
+        mode: u+x
+
+
+
+
+    - name: Upgrade pip
+      shell: pip install --upgrade pip
