@@ -18,7 +18,6 @@ RUN echo '[local]\nlocalhost\n' > /etc/ansible/hosts
 ADD ansible /opt/ansible
 WORKDIR /opt/ansible
 RUN ansible-playbook site.yml -c local
-RUN locale-gen en_US
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN pip3 install chaperone
 CMD ["/bin/bash"]
 

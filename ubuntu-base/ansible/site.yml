@@ -3,12 +3,12 @@
 
   tasks:
 
-
     - name: update cache
       shell: apt-get update
 
     - name: install packages
-      package:
+      apt:
+        install_recommends: no
         name: "{{ item }}"
       with_items:
         - ca-certificates
@@ -32,7 +32,9 @@
         - python-pip
         - python3-pip
         - python-dev
-
+        - python-setuptools
+        - python3-setuptools
+        - python3-dev
         - s3cmd
 
         - strace
@@ -43,14 +45,15 @@
         - bash
         - jq
 
+    - name: Upgrade pip
+      shell: pip install --upgrade pip
 
     - name: Install pip packages
       pip:
         name:
           - httpie
           - ansible-role
-
-    - command: pip3 install chaperone
+          - pyp
 
     - unarchive:
         src: https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
@@ -69,8 +72,8 @@
         dest: /usr/local/bin/gosu
         mode: u+x
 
+    - name: local
+      shell: locale-gen en_US
 
-
-
-    - name: Upgrade pip
-      shell: pip install --upgrade pip
+    - name: Cleanup
+      shell: apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && find /var/cache -type f -exec rm -rf {} \;

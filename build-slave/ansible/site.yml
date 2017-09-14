@@ -1,6 +1,11 @@
 - hosts:  all
   become: yes
 
+  vars:
+    tgz_packages:
+      - https://github.com/downloads/mackyle/xar/xar-1.6.1.tar.gz
+      - https://github.com/downloads/hogliux/bomutils/bomutils-0.2.tar.gz
+
   roles:
      - role: ansiblebit.oracle-java
        oracle_java_set_as_default: yes
@@ -14,6 +19,44 @@
 
   tasks:
 
+    - name: add osxcross
+      apt_repository:
+        repo: ppa:hogliux/osxcross
+        codename: trusty
+
+    - name: update cache
+      shell: apt-get update
+
+    - name: install packages
+      apt:
+        install_recommends: no
+        name: "{{ item }}"
+      with_items:
+        - nsis
+        - libffi-dev
+        - ant
+        - awscli
+        - postgresql-client
+        - mysql-client
+        - golang-go
+        - xar
+        - bomutils
+        - libssl-dev
+        - libxml2-dev
+        - cpio
+
+    - name: Install pip packages
+      pip:
+        name:
+          - dox
+          - twine
+          - pynsist
+          - wheel
+          - tox
+          - mcommons
+
+    - shell: "CFLAGS=-I/usr/include/libffi/include pip install pyOpenSSL paramiko cryptography>=1.1"
+
     - name: install security policies
       action: copy src=files/local_policy.jar dest=/usr/lib/jvm/java-8-oracle/jre/lib/security/
 
@@ -22,7 +65,6 @@
 
     - name: install nodejs
       shell: curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash - && apt-get install -y nodejs
-
 
     - name: Install node.js packages globally
       npm:
@@ -38,10 +80,5 @@
         - karma
         - yarn
 
-    - name: Install packages
-      package:
-        name:
-          - ant
-          - awscli
-          - postgresql-client
-          - mysql-client
+    - name: Cleanup
+      shell: apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && find /var/cache -type f -exec rm -rf {} \;
