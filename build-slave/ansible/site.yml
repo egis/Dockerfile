@@ -44,6 +44,9 @@
         - libxml2-dev
         - cpio
 
+    - name: configure golang
+      shell: ln -s /usr/lib/go-1.8/ /usr/local/go
+
     - name: Install pip packages
       pip:
         name:
