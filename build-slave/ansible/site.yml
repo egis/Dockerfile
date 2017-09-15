@@ -1,11 +1,6 @@
 - hosts:  all
   become: yes
 
-  vars:
-    tgz_packages:
-      - https://github.com/downloads/mackyle/xar/xar-1.6.1.tar.gz
-      - https://github.com/downloads/hogliux/bomutils/bomutils-0.2.tar.gz
-
   roles:
      - role: ansiblebit.oracle-java
        oracle_java_set_as_default: yes
@@ -24,6 +19,10 @@
         repo: ppa:hogliux/osxcross
         codename: trusty
 
+    - name: add golang ppa
+      apt_repository:
+        repo: ppa:longsleep/golang-backports
+
     - name: update cache
       shell: apt-get update
 
@@ -38,7 +37,7 @@
         - awscli
         - postgresql-client
         - mysql-client
-        - golang-go
+        - golang-1.8
         - xar
         - bomutils
         - libssl-dev
