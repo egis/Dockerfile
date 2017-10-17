@@ -37,6 +37,14 @@
         - python3-dev
         - s3cmd
 
+        - zlib1g-dev
+        - libxml2
+        - tzdata
+        - libxml2-dev
+        - libxslt-dev
+        - libffi-dev
+        - cmake
+
         - strace
         - psutils
         - iftop
@@ -68,9 +76,25 @@
         mode: u+x
 
     - get_url:
+        url: https://github.com/aptible/supercronic/releases/download/v0.1.3/supercronic-linux-amd64
+        dest: /usr/local/bin/supercronic
+        mode: u+x
+
+    - get_url:
         url: https://github.com/tianon/gosu/releases/download/1.10/gosu-amd64
         dest: /usr/local/bin/gosu
         mode: u+x
+
+    - name: install envkey-source
+      unarchive:
+        src: https://raw.githubusercontent.com/envkey/envkey-source/master/dist/envkey-source_1.0.0_linux_amd64.tar.gz
+        mode: a+x
+        creates: /usr/local/bin/envkey-source
+        remote_src: yes
+        exclude:
+            - LICENSE
+            - README.md
+        dest: /usr/local/bin/
 
     - name: local
       shell: locale-gen en_US
