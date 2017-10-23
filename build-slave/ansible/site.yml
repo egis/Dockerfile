@@ -5,6 +5,7 @@
      - role: cmprescott.chrome
      - role: rdeknijf.chromedriver
      - role: geerlingguy.docker
+     - role: Moshe-Immerman.javatools
 
   tasks:
 
@@ -43,21 +44,13 @@
         - bower
         - node-sass
         - karma
-        - yarn
+        - yarn@0.27.5
         - webdriverio
 
     - name: update webdriver-manager
       shell: webdriver-manager update
 
     - shell: selenium-standalone install
-
-    - name: install gradle
-      unarchive:
-        src: https://services.gradle.org/distributions/gradle-2.7-bin.zip
-        mode: a+x
-        creates: /usr/local/gradle-2.7
-        remote_src: yes
-        dest: /usr/local/
 
     - name: install micro
       unarchive:
@@ -67,23 +60,4 @@
         dest: /usr/local
         remote_src: yes
 
-    - name: install ant
-      unarchive:
-        src: http://www-eu.apache.org/dist//ant/binaries/apache-ant-1.9.9-bin.zip
-        dest: /usr/local
-        remote_src: yes
 
-    - name: add ant to path
-      file:
-        src:  /usr/local/apache-ant-1.9.9/bin/ant
-        dest: /usr/local/bin/ant
-        state: link
-
-    - name: add gradle to path
-      file:
-        src:  /usr/local/gradle-2.7/bin/gradle
-        dest: /usr/local/bin/gradle
-        state: link
-
-    - name: Cleanup
-      shell: apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && find /var/cache -type f -exec rm -rf {} \;

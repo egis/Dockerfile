@@ -2,14 +2,6 @@
   become: yes
   tasks:
 
-
-    - file: dest=/usr/lib/jvm/ state=directory
-    - name: install java 8 installation scripy
-      copy: src=files/install-oracle.sh dest=/usr/lib/jvm/install-oracle.sh mode=a+x
-
-    - name: install java 8
-      shell: /usr/lib/jvm/install-oracle.sh
-
     - name: "add apt keys"
       apt_key: url="{{item}}" state=present
       with_items:
@@ -24,6 +16,7 @@
         - geerlingguy.docker
         - rdeknijf.chromedriver
         - cmprescott.chrome
+        - Moshe-Immerman.javatools
 
     - name: update cache
       shell: apt-get update
@@ -60,9 +53,8 @@
         repo: "{{item}}"
         state: present
       with_items:
-        - deb https://deb.nodesource.com/node_6.x xenial main
-        - deb-src https://deb.nodesource.com/node_6.x xenial main
-
+        - deb https://deb.nodesource.com/node_7.x xenial main
+        - deb-src https://deb.nodesource.com/node_7.x xenial main
 
     - name: Cleanup
       shell: apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && find /var/cache -type f -exec rm -rf {} \;
