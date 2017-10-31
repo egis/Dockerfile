@@ -10,14 +10,6 @@
         - https://download.docker.com/linux/ubuntu/gpg
         - http://keyserver.ubuntu.com:11371/pks/lookup?op=get&search=0xC2518248EEA14886
 
-    - name: install roles
-      shell:  "ansible-galaxy install {{item}}"
-      with_items:
-        - geerlingguy.docker
-        - rdeknijf.chromedriver
-        - cmprescott.chrome
-        - Moshe-Immerman.javatools
-
     - name: update cache
       shell: apt-get update
 

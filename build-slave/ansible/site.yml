@@ -1,12 +1,5 @@
 - hosts:  all
   become: yes
-
-  roles:
-     - role: cmprescott.chrome
-     - role: rdeknijf.chromedriver
-     - role: geerlingguy.docker
-     - role: Moshe-Immerman.javatools
-
   tasks:
 
     - name: update cache
@@ -24,12 +17,6 @@
       pip:
         name:
           - papertrail-cli
-
-    - name: install security policies
-      action: copy src=files/local_policy.jar dest=/usr/lib/jvm/java-8-oracle/jre/lib/security/
-
-    - name: install security policies
-      action: copy src=files/US_export_policy.jar dest=/usr/lib/jvm/java-8-oracle/jre/lib/security/
 
     - name: Install node.js packages globally
       npm:
@@ -51,13 +38,3 @@
       shell: webdriver-manager update
 
     - shell: selenium-standalone install
-
-    - name: install micro
-      unarchive:
-        src: https://github.com/zyedidia/micro/releases/download/v1.3.3/micro-1.3.3-linux64.tar.gz
-        mode: a+x
-        creates: /usr/local/bin/micro
-        dest: /usr/local
-        remote_src: yes
-
-

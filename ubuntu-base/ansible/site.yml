@@ -17,6 +17,7 @@
 
         - parallel
         - net-tools
+        - nano
         - netcat
         - git
 

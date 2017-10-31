@@ -14,7 +14,7 @@ RUN apt-get update && \
   apt-get install -y ansible --no-install-recommends && \
   rm -rf /var/lib/apt/lists/*
 
-RUN echo '[local]\nlocalhost\n' > /etc/ansible/hosts
+RUN echo '[local]\nlocalhost ansible_connection=local\n' > /etc/ansible/hosts
 ADD ansible /opt/ansible
 WORKDIR /opt/ansible
 RUN ansible-playbook site.yml -c local
