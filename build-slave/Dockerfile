@@ -13,4 +13,3 @@ ENV PATH   /usr/local/go/bin:$PATH
 ENV GOPATH /go
 ENV TERM xterm
 CMD ["/bin/bash"]
-
